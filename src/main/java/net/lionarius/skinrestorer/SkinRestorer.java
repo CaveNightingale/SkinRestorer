@@ -12,7 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.source.BiomeAccess;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -84,16 +84,15 @@ public class SkinRestorer implements DedicatedServerModInitializer {
                         observer1.networkHandler.sendPacket(new EntityPositionS2CPacket(player));
                     } else if (player == observer1) {
                         observer1.networkHandler.sendPacket(new PlayerRespawnS2CPacket(
-                                observer1.world.getDimensionKey(),
+                                RegistryEntry.of(observer1.world.getDimension()),
                                 observer1.world.getRegistryKey(),
                                 BiomeAccess.hashSeed(observer1.getWorld().getSeed()),
                                 observer1.interactionManager.getGameMode(),
                                 observer1.interactionManager.getPreviousGameMode(),
                                 observer1.getWorld().isDebugWorld(),
                                 observer1.getWorld().isFlat(),
-                                true,
-                                Optional.of(GlobalPos.create(observer1.getWorld().getRegistryKey(), observer1.getBlockPos()))
-                        ));
+                                true)
+                        );
                         observer1.requestTeleport(observer1.getX(), observer1.getY(), observer1.getZ());
                         observer1.networkHandler.sendPacket(new UpdateSelectedSlotS2CPacket(observer1.getInventory().selectedSlot));
                         observer1.sendAbilitiesUpdate();

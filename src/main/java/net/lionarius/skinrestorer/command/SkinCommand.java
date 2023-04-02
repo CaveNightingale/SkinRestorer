@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.lionarius.skinrestorer.MineskinSkinProvider;
 import net.lionarius.skinrestorer.MojangSkinProvider;
 import net.lionarius.skinrestorer.SkinRestorer;
@@ -89,12 +90,8 @@ public class SkinCommand {
         return targets.size();
     }
 
-    private static int skinAction(ServerCommandSource src,  boolean setByOperator, Supplier<Property> skinSupplier) {
-        if (src.getPlayer() != null) {
-            skinAction(src, Collections.singleton(src.getPlayer().getGameProfile()), setByOperator, skinSupplier);
-            return 1;
-        } else {
-            return 0;
-        }
+    private static int skinAction(ServerCommandSource src,  boolean setByOperator, Supplier<Property> skinSupplier) throws CommandSyntaxException {
+        skinAction(src, Collections.singleton(src.getPlayer().getGameProfile()), setByOperator, skinSupplier);
+        return 1;
     }
 }
